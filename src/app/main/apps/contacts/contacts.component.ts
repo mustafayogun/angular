@@ -92,7 +92,7 @@ export class ContactsComponent implements OnInit, OnDestroy
     newContact(): void
     {
         this.dialogRef = this._matDialog.open(ContactsContactFormDialogComponent, {
-            panelClass: 'contact-form-dialog',
+            panelClass: 'envanter-form-dialog',
             data      : {
                 action: 'new'
             }

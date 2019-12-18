@@ -1,0 +1,45 @@
+<div class="sidebar-content">
+
+    <div class="card">
+
+        <!-- SIDEBAR HEADER -->
+
+        <!-- / SIDEBAR HEADER -->
+
+        <!-- SIDEBAR CONTENT -->
+        <div class="content py-16" fusePerfectScrollbar>
+
+            <div class="nav material2">
+
+                <div class="nav-item" aria-label="inbox">
+                    <a class="nav-link" matRipple (click)="changeFilter('all')"
+                       [ngClass]="{'active accent':filterBy ==='all'}">
+                        <span class="title">Tüm Envanter</span>
+                    </a>
+                </div>
+
+
+                <div class="nav-item" aria-label="frequently contacted" (click)="changeFilter('PompaIstasyonu')">
+                    <a class="nav-link" matRipple [ngClass]="{'active accent':filterBy ==='PompaIstasyonu'}">
+                        <div class="title">Pompa İstasyonları</div>
+                    </a>
+                </div>
+                    <div class="nav-item" aria-label="frequently contacted" (click)="changeFilter('DerinKuyu')">
+                    <a class="nav-link" matRipple [ngClass]="{'active accent':filterBy ==='DerinKuyu'}">
+                        <div class="title">Derin Kuyular</div>
+                    </a>
+                </div>
+
+                <div class="nav-item" aria-label="starred" (click)="changeFilter('SuDeposu')">
+                    <a class="nav-link" matRipple [ngClass]="{'active accent':filterBy ==='SuDeposu'}">
+                        <div class="title">Su Depoları</div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- / SIDEBAR CONTENT -->

@@ -34,7 +34,7 @@ export class MailComposeDialogComponent
     // -----------------------------------------------------------------------------------------------------
 
     /**
-     * Create compose form
+     * Create yeni-kayit form
      *
      * @returns {FormGroup}
      */

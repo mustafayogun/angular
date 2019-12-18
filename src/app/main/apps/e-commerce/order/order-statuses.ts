@@ -11,7 +11,7 @@ export const orderStatuses = [
     },
     {
         'id'   : 3,
-        'name' : 'Preparing the order',
+        'name' : 'Preparing the ariza-detay',
         'color': 'orange-500'
     },
     {
@@ -41,7 +41,7 @@ export const orderStatuses = [
     },
     {
         'id'   : 9,
-        'name' : 'On pre-order (paid)',
+        'name' : 'On pre-ariza-detay (paid)',
         'color': 'purple-300'
     },
     {
@@ -61,7 +61,7 @@ export const orderStatuses = [
     },
     {
         'id'   : 13,
-        'name' : 'On pre-order (not paid)',
+        'name' : 'On pre-ariza-detay (not paid)',
         'color': 'purple-300'
     },
     {

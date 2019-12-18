@@ -1950,7 +1950,7 @@ export class ProjectDashboardDb
         'weatherWidget': {
             'locations'      : {
                 'NewYork': {
-                    'name'           : 'New York',
+                    'name'           : 'Ankara',
                     'icon'           : 'icon-rainy2',
                     'temp'           : {
                         'C': '22',

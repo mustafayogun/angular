@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {
     MatButtonModule, MatChipsModule, MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatPaginatorModule, MatRippleModule, MatSelectModule, MatSnackBarModule,
-    MatSortModule,
-    MatTableModule, MatTabsModule
+    MatSortModule, MatToolbarModule, MatDialogModule,
+    MatTableModule, MatTabsModule, MatAutocompleteModule
 } from '@angular/material';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AgmCoreModule } from '@agm/core';
@@ -19,6 +19,9 @@ import { EcommerceOrdersComponent } from 'app/main/apps/e-commerce/orders/orders
 import { EcommerceOrdersService } from 'app/main/apps/e-commerce/orders/orders.service';
 import { EcommerceOrderComponent } from 'app/main/apps/e-commerce/order/order.component';
 import { EcommerceOrderService } from 'app/main/apps/e-commerce/order/order.service';
+import { ArizaKayitDialogComponent } from 'app/main/apps/e-commerce/dialogs/compose/compose.component';
+
+
 
 const routes: Routes = [
     {
@@ -43,14 +46,14 @@ const routes: Routes = [
         }
     },
     {
-        path     : 'orders',
+        path     : 'ariza-liste',
         component: EcommerceOrdersComponent,
         resolve  : {
             data: EcommerceOrdersService
         }
     },
     {
-        path     : 'orders/:id',
+        path     : 'ariza-liste/:id',
         component: EcommerceOrderComponent,
         resolve  : {
             data: EcommerceOrderService
@@ -63,9 +66,10 @@ const routes: Routes = [
         EcommerceProductsComponent,
         EcommerceProductComponent,
         EcommerceOrdersComponent,
-        EcommerceOrderComponent
+        EcommerceOrderComponent,
+        ArizaKayitDialogComponent
     ],
-    imports     : [
+    imports: [
         RouterModule.forChild(routes),
 
         MatButtonModule,
@@ -81,21 +85,25 @@ const routes: Routes = [
         MatSnackBarModule,
         MatTableModule,
         MatTabsModule,
-
+        MatAutocompleteModule,
         NgxChartsModule,
         AgmCoreModule.forRoot({
             apiKey: 'AIzaSyD81ecsCj4yYpcXSLFcYU97PvRsE_X8Bx8'
         }),
 
         FuseSharedModule,
-        FuseWidgetModule
+        FuseWidgetModule,
+        MatToolbarModule,
+        MatDialogModule,
+        MatAutocompleteModule
     ],
     providers   : [
         EcommerceProductsService,
         EcommerceProductService,
         EcommerceOrdersService,
         EcommerceOrderService
-    ]
+    ],
+    entryComponents: [ArizaKayitDialogComponent]
 })
 export class EcommerceModule
 {

@@ -1,6 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { TalepComponent } from './talep.component';
+import {TalepComponent} from './talep.component';
+
 
 describe('TalepComponent', () => {
   let component: TalepComponent;

@@ -8,6 +8,7 @@ import { FuseConfigService } from '@fuse/services/config.service';
 import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 
 import { navigation } from 'app/navigation/navigation';
+import {AuthenticationService} from '../../../security/authentication.service';
 
 @Component({
     selector     : 'toolbar',
@@ -28,6 +29,9 @@ export class ToolbarComponent implements OnInit, OnDestroy
 
     // Private
     private _unsubscribeAll: Subject<any>;
+    private activUser: {};
+    private _authenticationService: AuthenticationService ;
+
 
     /**
      * Constructor
@@ -99,6 +103,13 @@ export class ToolbarComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
+
+        if (localStorage.getItem('currentUser') != null)
+        {
+
+            this.activUser = JSON.parse(localStorage.getItem('currentUser')) ;
+            //console.log( this.activUser['token']);
+        }
         // Subscribe to the config changes
         this._fuseConfigService.config
             .pipe(takeUntil(this._unsubscribeAll))
@@ -136,6 +147,11 @@ export class ToolbarComponent implements OnInit, OnDestroy
         this._fuseSidebarService.getSidebar(key).toggleOpen();
     }
 
+ logoutt(): void{
+     localStorage.removeItem('currentUser');
+     location.reload(true);
+
+ }
     /**
      * Search
      *

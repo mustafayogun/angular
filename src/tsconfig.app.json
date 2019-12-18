@@ -1,0 +1,34 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "outDir": "../out-tsc/app",
+        "module": "es2015"
+    },
+    "exclude": [
+        "test.ts",
+        "**/*.spec.ts"
+    ],
+    "types": [
+        "YOUR_OTHER_TYPINGS_HERE",
+        "jquery",
+        "datatables.net",
+        "datatables.net-select"
+    ],
+
+    "styles": [
+        "YOUR_OTHER_CSS_HERE",
+        "../node_modules/bootstrap/dist/css/bootstrap.css",
+        "../node_modules/datatables.net-bs/css/dataTables.bootstrap.css",
+        "../node_modules/datatables.net-select-bs/css/select.bootstrap.css",
+        "YOUR_OTHER_CSS_HERE"
+    ],
+    "scripts": [
+        "YOUR_OTHER_JS_LIBS_HERE",
+        "../node_modules/jquery/dist/jquery.js",
+        "../node_modules/bootstrap/dist/js/bootstrap.js",
+        "../node_modules/datatables.net",
+        "../node_modules/datatables.net-bs/js/dataTables.bootstrap.js",
+        "../node_modules/datatables.net-select/js/dataTables.select.js",
+        "YOUR_OTHER_JS_LIBS_HERE",
+    ]
+}

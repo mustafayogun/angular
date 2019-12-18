@@ -29,7 +29,7 @@ export class TableHttpExample implements OnInit {
   ngOnInit() {
     this.exampleDatabase = new ExampleHttpDao(this.http);
 
-    // If the user changes the sort order, reset back to the first page.
+    // If the user changes the sort ariza-detay, reset back to the first page.
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
     merge(this.sort.sortChange, this.paginator.page)

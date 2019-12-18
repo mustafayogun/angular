@@ -98,7 +98,7 @@ export class MailMainSidebarComponent implements OnInit, OnDestroy
     composeDialog(): void
     {
         this.dialogRef = this._matDialog.open(MailComposeDialogComponent, {
-            panelClass: 'mail-compose-dialog'
+            panelClass: 'mail-yeni-kayit-dialog'
         });
         this.dialogRef.afterClosed()
             .subscribe(response => {

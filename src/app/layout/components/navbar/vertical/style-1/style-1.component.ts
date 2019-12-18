@@ -1,12 +1,15 @@
 import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { Subject } from 'rxjs';
-import { delay, filter, take, takeUntil } from 'rxjs/operators';
+import {Observable, Subject} from 'rxjs';
+import {delay, filter, map, take, takeUntil} from 'rxjs/operators';
 
 import { FuseConfigService } from '@fuse/services/config.service';
 import { FuseNavigationService } from '@fuse/components/navigation/navigation.service';
 import { FusePerfectScrollbarDirective } from '@fuse/directives/fuse-perfect-scrollbar/fuse-perfect-scrollbar.directive';
 import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
+import {AppComponent} from '../../../../../app.component';
+import {NavbarComponent} from '../../navbar.component';
+import {ApiService} from '../../../../../../services/api.service';
 
 @Component({
     selector     : 'navbar-vertical-style-1',
@@ -22,6 +25,10 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy
     // Private
     private _fusePerfectScrollbar: FusePerfectScrollbarDirective;
     private _unsubscribeAll: Subject<any>;
+    userName: string;
+     activUser: {};
+     activUserr: any [];
+    private _apiService: ApiService;
 
     /**
      * Constructor
@@ -35,11 +42,16 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy
         private _fuseConfigService: FuseConfigService,
         private _fuseNavigationService: FuseNavigationService,
         private _fuseSidebarService: FuseSidebarService,
-        private _router: Router
+        private _router: Router,
+
+
+
     )
     {
         // Set the private defaults
         this._unsubscribeAll = new Subject();
+
+
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -52,6 +64,7 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy
     {
         if ( !theDirective )
         {
+
             return;
         }
 
@@ -99,17 +112,34 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
+        if (localStorage.getItem('currentUser') != null)
+        {
+            this.activUser = JSON.parse(localStorage.getItem('currentUser')) ;
+            //console.log(this.activUser);
+            // this.getActiveUser(this.userName).subscribe(res => {
+            //
+            //     this.activUserr = res;
+            //     // tslint:disable-next-line:no-debugger
+            //     debugger
+            //     console.log(res);
+            // });
+
+        }
         this._router.events
             .pipe(
+
                 filter((event) => event instanceof NavigationEnd),
-                takeUntil(this._unsubscribeAll)
+                takeUntil(this._unsubscribeAll),
+
             )
             .subscribe(() => {
                     if ( this._fuseSidebarService.getSidebar('navbar') )
                     {
                         this._fuseSidebarService.getSidebar('navbar').close();
+
                     }
                 }
+
             );
 
         // Subscribe to the config changes
@@ -117,6 +147,7 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((config) => {
                 this.fuseConfig = config;
+
             });
 
         // Get current navigation
@@ -128,6 +159,8 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy
             .subscribe(() => {
                 this.navigation = this._fuseNavigationService.getCurrentNavigation();
             });
+
+
     }
 
     /**
@@ -150,7 +183,10 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy
     toggleSidebarOpened(): void
     {
         this._fuseSidebarService.getSidebar('navbar').toggleOpen();
+
+
     }
+
 
     /**
      * Toggle sidebar folded status

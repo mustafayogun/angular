@@ -1,0 +1,71 @@
+
+
+<mat-table #table [dataSource]="dataSource"
+           [@animateStagger]="{value:'50'}"
+           fusePerfectScrollbar>
+    <!-- Checkbox Column -->
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef  fxFlex="10" >id</mat-header-cell>
+        <mat-cell *matCellDef="let envanter" fxFlex="10" >
+            <p class="text-truncate font-weight-50" >{{envanter.id}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Email Column -->
+    <ng-container matColumnDef="envanterAdi" >
+        <mat-header-cell *matHeaderCellDef fxFlex="15">Envanter Adı</mat-header-cell>
+        <mat-cell *matCellDef="let envanter" fxFlex="15">
+            <p class="email text-truncate font-weight-50">
+                {{envanter.envAdi}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Phone Column -->
+    <ng-container matColumnDef="envKisaKodu">
+        <mat-header-cell *matHeaderCellDef fxFlex="20">Kısa-Kod</mat-header-cell>
+        <mat-cell *matCellDef="let envanter"fxFlex="10">
+            <p class="phone text-truncate">
+                {{envanter.envKisaKodu}}
+            </p>
+        </mat-cell>
+    </ng-container><ng-container matColumnDef="birim">
+        <mat-header-cell *matHeaderCellDef fxFlex="20">Birim</mat-header-cell>
+        <mat-cell *matCellDef="let envanter" fxFlex="30">
+            <p class="phone text-truncate">
+                {{envanter.birim.birimAdi}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="sorumlu">
+        <mat-header-cell *matHeaderCellDef  >İstasyon Sorumlusu</mat-header-cell>
+        <mat-cell *matCellDef="let envanter" >
+            <p class="email text-truncate">
+                {{envanter.sorumlu.adiSoyadi}}
+            </p>
+        </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="cepTel">
+        <mat-header-cell *matHeaderCellDef  >Sorumlu Cep Tel</mat-header-cell>
+        <mat-cell *matCellDef="let envanter" >
+            <p class="email text-truncate">
+                {{envanter.sorumlu.cepTel}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let envanter; columns: displayedColumns;"
+             class="envanter"
+             (click)="editEnvanter(envanter)"
+             [ngClass]="{'accent-50':checkboxes[envanter.id]}"
+             matRipple
+             [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+</mat-table>
+
+
+

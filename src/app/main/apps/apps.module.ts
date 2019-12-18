@@ -13,8 +13,20 @@ const routes = [
         loadChildren: './proje/proje.module#ProjeModule'
     },
     {
+        path        : 'envanter',
+        loadChildren: './envanter/envanter.module#EnvanterModule'
+    },
+    {
+        path        : 'ariza',
+        loadChildren: './ariza/ariza.module#ArizaModule'
+    },
+    {
         path        : 'dashboards',
         loadChildren: './dashboards/project/project.module#ProjectDashboardModule'
+    },
+    {
+        path        : 'dashboard/v1.0',
+        loadChildren: './dashboard/v1.0/project.module#ProjectDashboardModule'
     },
     {
         path        : 'mail',
@@ -55,7 +67,8 @@ const routes = [
     {
         path        : 'scrumboard',
         loadChildren: './scrumboard/scrumboard.module#ScrumboardModule'
-    }
+    },
+
 ];
 
 @NgModule({

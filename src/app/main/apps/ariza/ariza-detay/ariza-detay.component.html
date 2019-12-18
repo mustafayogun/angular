@@ -1,0 +1,404 @@
+<div id="ariza" class="page-layout carded fullwidth inner-scroll">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg accent"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header accent"
+             fxLayout="row" fxLayoutAlign="space-between center">
+
+            <!-- APP TITLE -->
+            <div fxLayout="row" fxLayoutAlign="start center">
+
+                <button mat-icon-button class="mr-16" [routerLink]="'/apps/ariza/ariza-liste'">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+
+                <div fxLayout="column" fxLayoutAlign="start start"
+                     [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    <div class="h2">
+                        Ariza Referans AR01 {{ariza.id}}
+                    </div>
+                    <div class="subtitle secondary-text">
+                        <span>Olusturan</span>
+                        <span>{{ariza.assignee.adiSoyadi}}</span>
+                        <span>{{ariza.assignee.kgsm}} </span>
+
+                    </div>
+                </div>
+            </div>
+            <!-- / APP TITLE -->
+
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card">
+
+            <!-- CONTENT -->
+            <div class="content">
+
+                <mat-tab-group fxLayout="column" fxFlex>
+                    <mat-tab label="Ariza Detay">
+                        <div class="ariza-details tab-content p-16" fusePerfectScrollbar>
+                            <div class="section pb-48">
+                            <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+                                <mat-icon class="m-0 mr-16 secondary-text">access_time</mat-icon>
+                                <div class="h2 secondary-text">Ariza Açıklaması</div>
+                            </div>
+                            <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                <mat-label>Ariza Konusu</mat-label>
+                                <input matInput readonly>{{ariza.konu}}
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                <mat-label>Ariza Açıklaması</mat-label>
+                                <textarea matInput
+                                          rows="3"
+                                          readonly>{{ariza.aciklama}}
+                                    </textarea>
+                            </mat-form-field>
+
+
+                           </div>
+
+
+                                <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+                                    <mat-icon class="m-0 mr-16 secondary-text">access_time</mat-icon>
+                                    <div class="h2 secondary-text">Ariza İş Akışı</div>
+                                </div>
+
+                                <table class="simple">
+                                    <thead>
+                                    <tr>
+                                        <th>İşlem Açıklama</th>
+                                        <th>İşlem Tairihi</th>
+                                        <th>İşlem Saihibi</th>
+                                        <th>İşlem Durum</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    <tr class="status h6 p-4" *ngFor="let arizaLogs of ariza.arizaLogs">
+                                        <td>
+                                                <span class="status h6 p-4" >
+                                                    {{arizaLogs.aciklama}}
+                                                </span>
+                                        </td>
+                                        <td>
+                                                <span>
+                                                    {{arizaLogs.tarih | date : "dd/MM/yyyy @ h:mma" }}
+                                                </span>
+                                        </td>
+                                        <td>
+                                                <span>
+                                                    {{arizaLogs.assignee.adiSoyadi}}
+                                                </span>
+                                        </td>
+                                        <td  *ngIf="arizaLogs.islem">
+                                                <span [ngClass]="arizaLogs.islem.color">
+                                                    {{arizaLogs.islem.name}}
+                                                </span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+
+
+
+
+                </div>
+           </mat-tab>
+
+                    <mat-tab label="İşlem-Onarım" fxLayout="column" fxFlex>
+                        <div class="ariza-details tab-content p-24" fusePerfectScrollbar>
+
+                            <div class="section pb-48">
+                                <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+                            <mat-icon class="m-0 mr-14 secondary-text">access_time</mat-icon>
+                            <div class="h3 secondary-text">Ariza Yapılan İşlem </div>
+                        </div>
+                                <form  name ="statusForm" class="update-status p-24" (ngSubmit)="updateStatus()"
+                                      [formGroup]="statusForm">
+
+
+                                    <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+                                        <mat-form-field appearance="outline" fxFlex="70">
+                                            <mat-label>İşlem Açıklama</mat-label>
+                                            <textarea matInput formControlName="aciklama" required
+                                                      row="4"></textarea>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+                                        <mat-form-field appearance="outline" fxFlex="70">
+                                    <mat-label>Ariza Durumu</mat-label>
+                                    <mat-select formControlName="newStatus"
+                                                required>
+
+                                        <mat-option *ngFor="let islems of islems"
+                                                    [value]="islems.id">
+                                            {{islems.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                        </mat-form-field>
+                                    </div>
+
+                                <button mat-raised-button class="mat-accent"
+                                        [disabled]="statusForm.invalid">
+                                    İşlem Onay
+                                </button>
+
+                            </form>
+
+                                <table class="simple">
+                                        <thead>
+                                        <tr>
+                                            <th>İşlem Açıklama</th>
+                                            <th>İşlem Tairihi</th>
+                                            <th>İşlem Saihibi</th>
+                                            <th>İşlem Durum</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        <tr class="status h6 p-4" *ngFor="let arizaLogs of ariza.arizaLogs">
+                                            <td>
+                                                <span class="status h6 p-4" >
+                                                    {{arizaLogs.aciklama}}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span>
+                                                    {{arizaLogs.tarih | date : "dd/MM/yyyy @ h:mma" }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span>
+                                                    {{arizaLogs.assignee.adiSoyadi}}
+                                                </span>
+                                            </td>
+                                            <td  *ngIf="arizaLogs.islem">
+                                                <span [ngClass]="arizaLogs.islem.color">
+                                                    {{arizaLogs.islem.name}}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                        </div>
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="Ariza Havele-Devir">
+                        <div class="ariza-details tab-content p-24" fusePerfectScrollbar  class="w-80-p">
+                                <mat-tab-group fxLayout="column" fxFlex>
+                                                <mat-tab label="Birime Havele-Devir" >
+                                                    <div class="ariza-details tab-content p-24" fusePerfectScrollbar>
+                                                        <div class="section pb-48">
+                                                            <form  name ="havaleForm" class="update-status p-24" (ngSubmit)="updateHavale()"
+                                                                   [formGroup]="havaleForm">
+                                                                <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+                                                                    <mat-form-field appearance="outline" fxFlex="70">
+                                                                        <mat-label>Birime Havele Nedeni</mat-label>
+                                                                        <textarea matInput formControlName="havaleBirimAciklama" required
+                                                                                  row="4"></textarea>
+                                                                    </mat-form-field>
+                                                                </div>
+                                                                <div class="pb-16" fxLayout="row" fxLayoutAlign="start center" >
+                                                                    <mat-form-field appearance="outline" fxFlex="70">
+                                                                        <mat-label>Birime Havale Seçimi</mat-label>
+                                                                        <mat-select formControlName="havaleBirim">
+
+                                                                            <mat-option *ngFor="let birim of birimListesi"
+                                                                                        [value]="birim.id">
+                                                                                {{birim.birimAdi}}
+                                                                            </mat-option>
+                                                                        </mat-select>
+                                                                    </mat-form-field>
+                                                                </div>
+                                                                <button mat-raised-button class="mat-accent"
+                                                                        [disabled]="havaleForm.invalid">
+                                                                    İşlem Onay
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </mat-tab>
+
+                                                <mat-tab label="Kişiye Havele-Devir">
+                                                    <div class="ariza-details tab-content p-24" fusePerfectScrollbar>
+                                                        <div class="section pb-48">
+                                                            <form  name ="personelHavaleForm" class="update-status p-24" (ngSubmit)="updatePersonelHavale()"
+                                                                   [formGroup]="personelHavaleForm">
+
+
+                                                                <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+                                                                    <mat-form-field appearance="outline" fxFlex="70">
+                                                                        <mat-label>Kişiye Havale Nedeni</mat-label>
+                                                                        <textarea matInput formControlName="havalePersonelAciklama" required
+                                                                                  row="4"></textarea>
+                                                                    </mat-form-field>
+                                                                </div>
+                                                            <div class="pb-16" fxLayout="row" fxLayoutAlign="start center" >
+                                                                <mat-form-field appearance="outline" fxFlex="70">
+                                                                    <mat-label>Kişiye Havale Seçimi</mat-label>
+                                                                    <mat-select formControlName="havalePersonel">
+
+                                                                        <mat-option *ngFor="let personels of personelListesi"
+                                                                                    [value]="personels.id">
+                                                                            {{personels.adiSoyadi}}
+                                                                        </mat-option>
+                                                                    </mat-select>
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <button mat-raised-button class="mat-accent"
+                                                                    [disabled]="personelHavaleForm.invalid">
+                                                                İşlem Onay
+                                                            </button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </mat-tab>
+
+
+                                </mat-tab-group>
+
+                        </div>
+                    </mat-tab>
+
+                    <mat-tab label="İstasyon Bilgileri">
+                        <div class="ariza-details tab-content p-24" fusePerfectScrollbar>
+
+                           <div class="section pb-48">
+
+                            <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+
+                                <div class="h2 secondary-text">{{ariza.envanter.envAdi}} Demir Baş Listesi</div>
+                            </div>
+
+                            <table class="simple">
+                                <thead>
+
+                                <tr>
+                                    <th>İstasyon Demirbaş Adı</th>
+                                    <th>Özelliği</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr *ngFor="let envanterDetay of ariza.envanterDetayDtos">
+                                    <td class="tracking-code">
+                                        {{envanterDetay.field.fieldName}}
+                                    </td>
+                                    <td>
+                                        {{envanterDetay.fieldValue}}
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="İstasyon Ariza Geçmişi">
+                        <div class="ariza-details tab-content p-24" fusePerfectScrollbar>
+
+                            <div class="section pb-48">
+
+                                <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+
+                                    <div class="h2 secondary-text">{{ariza.envanter.envAdi}} Ariza Geçmişi</div>
+                                </div>
+
+                                <table class="simple">
+                                    <thead>
+
+                                    <tr>
+                                        <th>Ariza ID </th>
+                                        <th>Ariza Konu</th>
+                                        <th>Ariza Açıklama</th>
+                                        <th>İşlem Yapan</th>
+                                        <th>Son İşlem Tarihi</th>
+
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr *ngFor="let arizaListesi of ariza.envanterArizaGecmisi.arizaListesi">
+                                        <td class="tracking-code">
+                                            {{arizaListesi.id}}
+                                        </td>
+                                        <td class="tracking-code">
+                                            {{arizaListesi.konu}}
+                                        </td>
+                                        <td class="tracking-code">
+                                            {{arizaListesi.aciklama}}
+                                        </td>
+                                        <td class="tracking-code">
+                                        {{arizaListesi.assignee.adiSoyadi}}
+                                        </td>
+                                        <td class="tracking-code">
+                                        {{arizaListesi.tarih | date : "dd/MM/yyyy @ h:mma"}}
+                                        </td>
+
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </mat-tab>
+                    <mat-tab label="İstasyon Görevlileri">
+                        <div class="ariza-details tab-content p-24" fusePerfectScrollbar>
+
+                            <div class="section pb-48">
+
+                                <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+
+                                    <div class="h2 secondary-text">{{ariza.envanter.envAdi}} Görevli Listesi</div>
+                                </div>
+
+                                <table class="simple">
+                                    <thead>
+
+                                    <tr>
+                                        <th>Adi Soyadı </th>
+                                        <th>Telefon Numarası </th>
+
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td class="tracking-code">
+                                            {{ariza.envanter.sorumlu.adiSoyadi}}
+                                        </td>
+                                        <td class="tracking-code">
+                                            {{ariza.envanter.sorumlu.cepTel}}
+                                        </td>
+
+
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </mat-tab>
+                    <mat-tab label="İstasyon Bakım Detay">
+
+
+                    </mat-tab>
+
+                </mat-tab-group>
+
+            </div>
+            <!-- / CONTENT -->
+
+        </div>
+        <!-- / CONTENT CARD -->
+
+    </div>
+    <!-- / CENTER -->
+</div>

@@ -3,17 +3,30 @@ import { FuseUtils } from '@fuse/utils';
 export class Order
 {
     id: string;
-    reference: string;
-    subtotal: string;
-    tax: string;
-    discount: string;
-    total: string;
-    date: string;
-    customer: any;
-    products: any[];
-    status: any[];
-    payment: any;
-    shippingDetails: any[];
+    konu: string;
+    aciklama: string;
+    status: string;
+    islem: any[];
+    arizaLogs: any[];
+    sorumluBirim: any[];
+    arizaSorumluUser: any[];
+    sorumluBirimID : string;
+    arizaSorumluUserId : string;
+    assignee: any[];
+    assigneeId: string;
+    islems:any[];
+    islemID : string;
+    arizaLogAciklama : string;
+    envanter: any[];
+    tarih: string;
+    envanterDetayDtos: any [];
+    envanterAdi: string;
+    envanterArizaGecmisi:any [];
+    arizaLogDto: any [];
+    durum: any [];
+    durumId: string;
+
+
 
     /**
      * Constructor
@@ -24,16 +37,85 @@ export class Order
     {
         order = order || {};
         this.id = order.id || FuseUtils.generateGUID();
-        this.reference = order.reference || FuseUtils.generateGUID();
-        this.subtotal = order.subtotal || 0;
-        this.tax = order.tax || 0;
-        this.discount = order.discount || 0;
-        this.total = order.total || 0;
-        this.date = order.date || '';
-        this.customer = order.customer || {};
-        this.products = order.products || [];
-        this.status = order.status || [];
-        this.payment = order.payment || {};
-        this.shippingDetails = order.shippingDetails || [];
+        this.konu = order.konu || 0;
+        this.aciklama = order.aciklama || 0;
+        this.status = order.status || 0;
+        this.arizaLogs = order.arizaLogs || [];
+        this.sorumluBirim = order.sorumluBirim || [];
+        this.arizaSorumluUser = order.arizaSorumluUser || [];
+        this.assignee = order.assignee || [];
+        this.islem = order.islem || [];
+        this.islems = order.islems || [];
+        this.assigneeId = order.assigneeId || 0;
+        this.arizaLogAciklama = order.arizaLogAciklama || 0;
+        this.tarih = order.tarih || 0;
+        this.envanter = order.envanter || [] ;
+        this.envanterDetayDtos = order.envanterDetayDtos || [];
+        this.envanterArizaGecmisi = order.envanterArizaGecmisi || 0;
+        this.arizaLogDto = this.envanterArizaGecmisi['arizaLogDto'] || 0 ;
+        this.durum = order.durum || [];
+
     }
+
+
+
+}
+export class ArizaLog
+{
+
+    arizaId: string;
+    aciklama: string;
+    assigneeId: string;
+    islemId: string;
+
+    /**
+     * Constructor
+     *
+     * @param order
+     */
+    constructor(alog?) {
+        alog = alog || {};
+        this.aciklama = alog.aciklama || 0;
+        this.arizaId = alog.arizaId || 0;
+        this.assigneeId = alog.assigneeId || 0;
+        this.islemId = alog.islemId || 0;
+
+
+    }
+
+
+}
+
+export class ArizaKaydet
+{
+
+    konu: string;
+    aciklama: string;
+    assigneeId: string;
+    islemId: string;
+    sorumluBirimId: string;
+    envanterId: string;
+    durumId: string;
+
+
+    /**
+     * Constructor
+     *
+     * @param order
+     */
+    constructor(ariza?) {
+        ariza = ariza || {};
+        this.konu = ariza.konu || 0;
+        this.aciklama = ariza.aciklama || 0;
+        this.assigneeId = ariza.assigneeId || 0;
+        this.islemId = ariza.islemId || 0;
+        this.sorumluBirimId = ariza.sorumluBirimId || 0 ;
+        this.envanterId = ariza.envanterId || 0 ;
+        this.durumId = ariza.durumId || 0;
+
+
+
+    }
+
+
 }

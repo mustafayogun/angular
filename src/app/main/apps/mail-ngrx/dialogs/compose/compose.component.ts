@@ -34,7 +34,7 @@ export class MailNgrxComposeDialogComponent
     // -----------------------------------------------------------------------------------------------------
 
     /**
-     * Create compose form
+     * Create yeni-kayit form
      *
      * @returns {FormGroup}
      */

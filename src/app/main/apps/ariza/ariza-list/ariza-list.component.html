@@ -1,0 +1,155 @@
+<div id="ariza-list" class="page-layout carded fullwidth inner-scroll">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg accent"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header accent"
+             fxLayout="column" fxLayoutAlign="center center"
+             fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+
+            <!-- APP TITLE -->
+            <div class="logo mb-24 mb-sm-0"
+                 fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                    shopping_basket
+                </mat-icon>
+                <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Bekleyen İşler</span>
+            </div>
+            <!-- / APP TITLE -->
+
+            <!-- SEARCH -->
+            <div class="search-wrapper  ml-sm-32">
+                <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
+                    <mat-icon>search</mat-icon>
+                    <input #filter placeholder="Arama">
+                </div>
+            </div>
+            <!-- / SEARCH -->
+
+            <div class="px-24 pt-32 pb-12">
+                <button mat-raised-button
+                        class="mat-accent compose-dialog-button fuse-white w-100-p"
+                        (click)="composeDialog()"
+                        aria-label="Compose">
+                  +YENİ ARIZA KAYDI
+                </button>
+            </div>
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card">
+
+            <mat-table class="arizas-table"
+                       #table [dataSource]="dataSource"
+                       matSort
+                       [@animateStagger]="{value:'50'}"
+                       fusePerfectScrollbar>
+
+                <!-- ID Column -->
+                <ng-container matColumnDef="id">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+                    <mat-cell *matCellDef="let ariza">
+                        <p class="text-truncate">{{ariza.id}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Reference Column -->
+                <ng-container matColumnDef="konu">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>konu</mat-header-cell>
+                    <mat-cell *matCellDef="let ariza" fxHide fxShow.gt-sm>
+                        <p class="text-truncate">{{ariza.konu}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="assignee">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Kaydeden Kullanıcı</mat-header-cell>
+                    <mat-cell *matCellDef="let ariza">
+                        <p class="text-truncate">
+                            {{ariza.assignee.adiSoyadi}}
+
+                        </p>
+                    </mat-cell>
+                </ng-container>
+                <!-- Status Column -->
+                <ng-container matColumnDef="birim">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Sorumlu Birim</mat-header-cell>
+                    <mat-cell *matCellDef="let ariza">
+                        <p class="status text-truncate h6 p-4" >
+                            {{ariza.sorumluBirim.birimAdi}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="sorumluPersonel">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Sorumlu Personel</mat-header-cell>
+                    <mat-cell *matCellDef="let ariza">
+                        <p class="status text-truncatetext-truncate"  *ngIf ="ariza.arizaSorumluUser" >
+                           {{ariza.arizaSorumluUser.adiSoyadi}}
+                        </p>
+                        <p class="status fuse-black text-truncatetext-truncate"  *ngIf ="!ariza.arizaSorumluUser" >
+                            Havele Bekliyor...
+                        </p>
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="envanter">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>İstasyon-Envanter</mat-header-cell>
+                    <mat-cell *matCellDef="let ariza">
+                        <p class="status text-truncate h6 p-4" >{{ariza.envanter.envAdi}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
+
+
+                <ng-container matColumnDef="durum">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Durum</mat-header-cell>
+                    <mat-cell *matCellDef="let ariza" fxHide fxShow.gt-sm>
+                        <p class="text-truncate" [ngClass]="ariza.islem.color">
+                            {{ariza.durum.name}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Total Price Column -->
+                <ng-container matColumnDef="islem">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-md>İşlem Durumu</mat-header-cell>
+                    <mat-cell *matCellDef="let ariza" fxHide fxShow.gt-md>
+                        <p class="text-truncate h6 p-4" >
+                            {{ariza.islem.name }}
+                        </p>
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="tarih">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-md>Kayıt Tarihi</mat-header-cell>
+                    <mat-cell *matCellDef="let ariza" fxHide fxShow.gt-md>
+                        <p class="total-price text-truncate" >
+                            {{ariza.tarih| date : "dd/MM/yyyy @ h:mma"}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+
+                <mat-row *matRowDef="let ariza; columns: displayedColumns;"
+                         class="ariza"
+                         matRipple
+                         [routerLink]="'/apps/ariza/ariza-liste/'+ariza.id">
+                </mat-row>
+            </mat-table>
+
+            <mat-paginator #paginator
+                           [length]="dataSource.filteredData.length"
+                           [pageIndex]="0"
+                           [pageSize]="10"
+                           [pageSizeOptions]="[5, 10, 25, 100]">
+            </mat-paginator>
+
+        </div>
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>

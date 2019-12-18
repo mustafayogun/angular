@@ -19,9 +19,12 @@ export class ProjectDashboardComponent implements OnInit
 {
     projects: any[];
     selectedProject: any;
-
+    ariza: any [];
+    birimAs: any [];
+    private activeUser: {};
     widgets: any;
     widget5: any = {};
+
     widget6: any = {};
     widget7: any = {};
     widget8: any = {};
@@ -88,7 +91,7 @@ export class ProjectDashboardComponent implements OnInit
             doughnut     : true,
             gradient     : false,
             scheme       : {
-                domain: ['#f44336', '#9c27b0', '#03a9f4', '#e91e63']
+                domain: ['#f44336', '#9c27b0', '#03a9f4', '#e91e63', '#e91e77']
             },
             onSelect     : (ev) => {
                 console.log(ev);
@@ -153,7 +156,16 @@ export class ProjectDashboardComponent implements OnInit
      */
     ngOnInit(): void
     {
+        this.activeUser = JSON.parse((localStorage.getItem('currentUser')));
         this.projects = this._projectDashboardService.projects;
+        this._projectDashboardService.getDashboard().subscribe(res => {
+            this.ariza = res;
+           // console.log(res);
+        });
+        this._projectDashboardService.getBirimAs().subscribe(res => {
+            this.birimAs = res;
+           // console.log(res);
+        });
         this.selectedProject = this.projects[0];
         this.widgets = this._projectDashboardService.widgets;
 

@@ -1,17 +1,17 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MatPaginator, MatSort } from '@angular/material';
+import {MatDialog, MatPaginator, MatSort} from '@angular/material';
 import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject, fromEvent, merge, Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
-
 import { fuseAnimations } from '@fuse/animations';
 import { FuseUtils } from '@fuse/utils';
-
 import { EcommerceOrdersService } from 'app/main/apps/e-commerce/orders/orders.service';
+import { ArizaKayitDialogComponent } from 'app/main/apps/e-commerce/dialogs/compose/compose.component';
 import { takeUntil } from 'rxjs/internal/operators';
+import {FormGroup} from '@angular/forms';
 
 @Component({
-    selector     : 'e-commerce-orders',
+    selector     : 'e-commerce-ariza-liste',
     templateUrl  : './orders.component.html',
     styleUrls    : ['./orders.component.scss'],
     animations   : fuseAnimations,
@@ -20,7 +20,7 @@ import { takeUntil } from 'rxjs/internal/operators';
 export class EcommerceOrdersComponent implements OnInit, OnDestroy
 {
     dataSource: FilesDataSource | null;
-    displayedColumns = ['id', 'reference', 'customer', 'total', 'payment', 'status', 'date'];
+    displayedColumns = ['id', 'konu', 'assignee',  'birim', 'sorumluPersonel', 'envanter', 'islem', 'tarih', 'durum' ];
 
     @ViewChild(MatPaginator)
     paginator: MatPaginator;
@@ -30,7 +30,7 @@ export class EcommerceOrdersComponent implements OnInit, OnDestroy
 
     @ViewChild(MatSort)
     sort: MatSort;
-
+    dialogRef: any;
     // Private
     private _unsubscribeAll: Subject<any>;
 
@@ -40,22 +40,31 @@ export class EcommerceOrdersComponent implements OnInit, OnDestroy
      * @param {EcommerceOrdersService} _ecommerceOrdersService
      */
     constructor(
-        private _ecommerceOrdersService: EcommerceOrdersService
+        private _ecommerceOrdersService: EcommerceOrdersService,
+        private _matDialog: MatDialog,
     )
     {
         // Set the private defaults
         this._unsubscribeAll = new Subject();
+
     }
 
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
     // -----------------------------------------------------------------------------------------------------
+    composeDialog(): void
+    { this.dialogRef = this._matDialog.open(ArizaKayitDialogComponent, {
+            panelClass: 'mail-ngrx-yeni-kayit-dialog'
+        });
+
+    }
 
     /**
      * On init
      */
     ngOnInit(): void
     {
+
         this.dataSource = new FilesDataSource(this._ecommerceOrdersService, this.paginator, this.sort);
 
         fromEvent(this.filter.nativeElement, 'keyup')
@@ -207,24 +216,31 @@ export class FilesDataSource extends DataSource<any>
                 case 'id':
                     [propertyA, propertyB] = [a.id, b.id];
                     break;
-                case 'reference':
-                    [propertyA, propertyB] = [a.reference, b.reference];
+                case 'konu':
+                    [propertyA, propertyB] = [a.konu, b.konu];
                     break;
-                case 'customer':
-                    [propertyA, propertyB] = [a.customer.firstName, b.customer.firstName];
+                case 'assignee':
+                    [propertyA, propertyB] = [a.assignee.adiSoyadi, b.assignee.adiSoyadi];
                     break;
-                case 'total':
-                    [propertyA, propertyB] = [a.total, b.total];
-                    break;
-                case 'payment':
-                    [propertyA, propertyB] = [a.payment.method, b.payment.method];
+                case 'islemDurumu':
+                    [propertyA, propertyB] = [a.islem.name, b.islem.name];
                     break;
                 case 'status':
-                    [propertyA, propertyB] = [a.status[0].name, b.status[0].name];
+                    [propertyA, propertyB] = [a.status, b.status];
                     break;
-                case 'date':
-                    [propertyA, propertyB] = [a.date, b.date];
+                case 'birim':
+                    [propertyA, propertyB] = [a.birim.birimAdi, b.birim.birimAdi];
                     break;
+                    case 'sorumluPersonel':
+                    [propertyA, propertyB] = [a.arizaSorumluUser.adiSoyadi, b.a.arizaSorumluUser.adiSoyadi];
+                    break;
+                case 'envanter':
+                    [propertyA, propertyB] = [a.envanter.envAdi, b.envanter.envAdi];
+                    break;
+                case 'tarih':
+                    [propertyA, propertyB] = [a.tarih, b.tarih];
+                    break;
+
             }
 
             const valueA = isNaN(+propertyA) ? propertyA : +propertyA;

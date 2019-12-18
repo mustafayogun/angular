@@ -2,8 +2,8 @@ import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {DOCUMENT} from '@angular/common';
 import {Platform} from '@angular/cdk/platform';
 import {TranslateService} from '@ngx-translate/core';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {Observable, Subject} from 'rxjs';
+import {map, takeUntil} from 'rxjs/operators';
 
 import {FuseConfigService} from '@fuse/services/config.service';
 import {FuseNavigationService} from '@fuse/components/navigation/navigation.service';
@@ -12,6 +12,8 @@ import {FuseSplashScreenService} from '@fuse/services/splash-screen.service';
 import {FuseTranslationLoaderService} from '@fuse/services/translation-loader.service';
 import {navigation} from 'app/navigation/navigation';
 import {locale as navigationTurkish} from 'app/navigation/i18n/tr';
+import {Local} from 'protractor/built/driverProviders';
+import {ApiService} from '../services/api.service';
 
 @Component({
     selector   : 'app',
@@ -22,9 +24,12 @@ export class AppComponent implements OnInit, OnDestroy
 {
     fuseConfig: any;
     navigation: any;
+    activeUser: {};
 
     // Private
     private _unsubscribeAll: Subject<any>;
+    private _apiService: ApiService;
+
 
     /**
      * Constructor
@@ -46,7 +51,8 @@ export class AppComponent implements OnInit, OnDestroy
         private _fuseSplashScreenService: FuseSplashScreenService,
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
         private _translateService: TranslateService,
-        private _platform: Platform
+        private _platform: Platform,
+
     )
     {
         // Get default navigation
@@ -69,6 +75,7 @@ export class AppComponent implements OnInit, OnDestroy
 
         // Use a language
         this._translateService.use('en');
+
 
         /**
          * ----------------------------------------------------------------------------------------------------
@@ -122,6 +129,8 @@ export class AppComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
+
+
         // Subscribe to config changes
         this._fuseConfigService.config
             .pipe(takeUntil(this._unsubscribeAll))
@@ -163,7 +172,20 @@ export class AppComponent implements OnInit, OnDestroy
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();
     }
+    getActiveUser( username):  Observable<any>{
+        return this._apiService.get('/user/activeUser/' + username).pipe(map(
+            res => {
+                if (res) {
 
+                    return res;
+
+                }else {
+                    console.log(res);
+                    return {};
+                }
+            }
+        ));
+    }
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
@@ -173,6 +195,7 @@ export class AppComponent implements OnInit, OnDestroy
      *
      * @param key
      */
+ 
     toggleSidebarOpen(key): void
     {
         this._fuseSidebarService.getSidebar(key).toggleOpen();

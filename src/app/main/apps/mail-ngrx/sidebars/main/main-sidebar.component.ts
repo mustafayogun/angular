@@ -60,7 +60,7 @@ export class MailNgrxMainSidebarComponent
     composeDialog(): void
     {
         this.dialogRef = this._matDialog.open(MailNgrxComposeDialogComponent, {
-            panelClass: 'mail-ngrx-compose-dialog'
+            panelClass: 'mail-ngrx-yeni-kayit-dialog'
         });
 
         this.dialogRef.afterClosed()
@@ -78,6 +78,7 @@ export class MailNgrxMainSidebarComponent
                      */
                     case 'send':
                         console.log('new Mail', formData.getRawValue());
+                        //formData.addControl('id','ad');
                         break;
                     /**
                      * Delete

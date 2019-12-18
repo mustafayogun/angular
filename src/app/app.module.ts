@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
@@ -11,22 +11,28 @@ import 'hammerjs';
 import { FuseModule } from '@fuse/fuse.module';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { FuseProgressBarModule, FuseSidebarModule, FuseThemeOptionsModule } from '@fuse/components';
-
 import { fuseConfig } from 'app/fuse-config';
-
 import { FakeDbService } from 'app/fake-db/fake-db.service';
 import { AppComponent } from 'app/app.component';
 import { AppStoreModule } from 'app/store/store.module';
 import { LayoutModule } from 'app/layout/layout.module';
+import {JwtInterceptor} from './security/jwt.interceptor';
+import {AuthGuard} from './security/auth.guard';
+import {AuthenticationService} from './security/authentication.service';
+import {ErrorInterceptor} from './security/authentication.interceptor';
+import {LoginModule} from './login/login.module';
 
 const appRoutes: Routes = [
     {
         path        : 'apps',
-        loadChildren: './main/apps/apps.module#AppsModule'
+        loadChildren: './main/apps/apps.module#AppsModule',
+       canActivate:  [AuthGuard]
+
     },
     {
         path        : 'pages',
-        loadChildren: './main/pages/pages.module#PagesModule'
+        loadChildren: './main/pages/pages.module#PagesModule',
+
     },
     {
         path        : 'ui',
@@ -42,7 +48,10 @@ const appRoutes: Routes = [
     },
     {
         path      : '**',
-        redirectTo: 'apps/dashboards'
+        redirectTo: 'apps/dashboards',
+        canActivate: [AuthGuard]
+
+
     }
 ];
 
@@ -75,15 +84,24 @@ const appRoutes: Routes = [
         FuseSharedModule,
         FuseSidebarModule,
         FuseThemeOptionsModule,
-
         // App modules
         LayoutModule,
-        AppStoreModule
+        AppStoreModule,
+        LoginModule
+
     ],
+    providers: [
+      AuthenticationService,
+      AuthGuard,
+        {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
+        {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
+    ],
+
     bootstrap   : [
         AppComponent
     ]
 })
 export class AppModule
 {
+
 }

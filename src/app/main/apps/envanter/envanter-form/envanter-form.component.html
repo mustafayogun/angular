@@ -1,0 +1,111 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{dialogTitle}}</span>
+            <button mat-icon-button (click)="matDialogRef.close()" aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+
+
+    </mat-toolbar>
+
+    <div mat-dialog-content class="p-24 pb-0 m-0" fusePerfectScrollbar>
+
+        <form [formGroup]="envanterForm" (ngSubmit)="envanterKaydet(); envanterUpdate();">
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>Envanter Tip</mat-label>
+                    <mat-icon matSuffix class="secondary-text">local_offer</mat-icon>
+                    <mat-select formControlName="tip"
+                                required>
+                        <mat-option *ngFor="let tip of tipListe"
+                                    [value]="tip.id">
+                            {{tip.tipAdi}}
+                        </mat-option>
+                    </mat-select>
+
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>Envanter Adı</mat-label>
+                    <input name="envAdi" formControlName="envAdi" matInput required>
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>Kısa Adi</mat-label>
+                    <input name="envKisaKodu" formControlName="envKisaKodu" matInput>
+                </mat-form-field>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>Kısa Kod</mat-label>
+                    <input name="envKodu" formControlName="envKodu" matInput>
+                </mat-form-field>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>Sorumlu Personel</mat-label>
+                    <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
+                    <mat-select formControlName="sorumlu"
+                                required>
+                        <mat-option *ngFor="let per of personelListe"
+                                    [value]="per.id">
+                            {{per.adiSoyadi}}
+                        </mat-option>
+                    </mat-select>
+
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>Sorumlu Birim</mat-label>
+                    <mat-icon matSuffix class="secondary-text">domain</mat-icon>
+                    <mat-select formControlName="birim"
+                                required>
+
+                        <mat-option *ngFor="let bas of baskanlikBirimleri"
+                                    [value]="bas.id">
+                            {{bas.birimAdi}}
+                        </mat-option>
+                    </mat-select>
+
+                </mat-form-field>
+            </div>
+
+
+    <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="end center">
+
+
+
+        <button *ngIf="action !== 'edit'"
+                mat-button
+                class="save-button"
+                (click)="matDialogRef.close(envanterForm)"
+                [disabled]="envanterForm.invalid"
+                aria-label="SAVE">
+            KAYDET
+        </button>
+
+        <button *ngIf="action === 'edit'"
+                mat-button
+                class="save-button"
+                (click)="matDialogRef.close(['save',envanterForm])"
+                [disabled]="envanterForm.invalid"
+                aria-label="SAVE">
+            GÜNCELLE
+        </button>
+
+    </div>
+
+
+</form>
+    </div>
+
+
+</div>

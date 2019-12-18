@@ -1,7 +1,4 @@
 import {NgModule} from '@angular/core';
-
-import {LoginModule} from 'app/main/pages/authentication/login/login.module';
-import {Login2Module} from 'app/main/pages/authentication/login-2/login-2.module';
 import {RegisterModule} from 'app/main/pages/authentication/register/register.module';
 import {Register2Module} from 'app/main/pages/authentication/register-2/register-2.module';
 import {ForgotPasswordModule} from 'app/main/pages/authentication/forgot-password/forgot-password.module';
@@ -24,17 +21,16 @@ import {FaqModule} from 'app/main/pages/faq/faq.module';
 import {KnowledgeBaseModule} from 'app/main/pages/knowledge-base/knowledge-base.module';
 import {TalepModule} from '../apps/talep/talep.module';
 import {ProjeModule} from '../apps/proje/proje.module';
+import {YardimTalepModule} from '../apps/yardim-talep/yardim-talep.module';
+
 
 @NgModule({
     imports: [
         TalepModule,
         ProjeModule,
-
-
-
+        YardimTalepModule,
         // Authentication
-        LoginModule,
-        Login2Module,
+
         RegisterModule,
         Register2Module,
         ForgotPasswordModule,

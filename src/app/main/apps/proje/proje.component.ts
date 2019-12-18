@@ -1,27 +1,36 @@
-import {AfterViewInit, Component, OnInit, Renderer} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ProjeService} from '../../../../services/shared/proje.service';
-import {Router} from '@angular/router';
 
+
+declare var $;
 
 @Component({
-    selector: 'app-proje',
+
     templateUrl: './proje.component.html',
     styleUrls: ['./proje.component.css']
 })
-export class ProjeComponent implements OnInit, AfterViewInit {
+export class ProjeComponent implements OnInit {
+    message = '';
     dtOptions: DataTables.Settings = {};
-    projeMesaj = 'Proje Mesaj';
-    dtTrigger: any;
 
 
-    constructor(private  projeService: ProjeService, private renderer: Renderer, private router: Router) {
+    constructor(private  projeService: ProjeService) {
 
     }
 
+    someClickHandler(info: any): void {
+        this.message = info.id + ' - ' + info.firstName;
+        alert('lolo');
+    }
 
     ngOnInit(): void {
+
         this.dtOptions = {
-            ajax: 'http://localhost:8000/api/proje/2',
+            ajax: {
+                url: 'http://localhost:8000/api/proje/pagination?page=0&size=1500',
+                dataSrc: 'content'
+            },
+
             columns: [{
                 title: 'ID',
                 data: 'id'
@@ -30,22 +39,21 @@ export class ProjeComponent implements OnInit, AfterViewInit {
                 data: 'projeAdi'
             }, {
                 title: 'Last name',
-                data: 'ProjeCode'
-            }, {
-                title: 'Action',
-                render: function (data: any, type: any, full: any) {
-                    return 'View';
-                }
-            }]
-        };
-    }
+                data: 'projeCode'
+            }],
+            dom: 'Bfrtip',
+            // Configure the buttons
 
-    ngAfterViewInit(): void {
-        this.renderer.listenGlobal('document', 'click', (event) => {
-            if (event.target.hasAttribute('view-person-id')) {
-                this.router.navigate(['/person/' + event.target.getAttribute('view-person-id')]);
+            rowCallback: (row: Node, data: any[] | Object, index: number) => {
+                const self = this;
+                $('td', row).unbind('click');
+                $('td', row).bind('click', () => {
+                    self.someClickHandler(data);
+                });
+                return row;
             }
-        });
-    }
 
+        };
+
+    }
 }
